@@ -1,0 +1,9 @@
+we are using npm express package
+ to create a server and handle requests and responses.
+ jsonwebtoken package to generate and verify JWT tokens
+ bcryptjs package to hash passwords for secure storage.
+ body-parser package to parse incoming request bodies in middleware.
+ dotenv package to manage environment variables.
+ mongoose package to interact with MongoDB database.
+ joi package for data validation.
+ cors package to enable Cross-Origin Resource Sharing (CORS) for frontend-backend communication.
