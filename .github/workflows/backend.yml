@@ -20,7 +20,7 @@ jobs:
                 path: node_modules
                 key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
             - name: Install the dependencies
-              if: failure() && steps.cache.outputs.cache-hit != 'true'
+              if: failure() || steps.cache.outputs.cache-hit != 'true'
               run: npm ci
             - name: Verify the cache
               if: success() && steps.cache.outputs.cache-hit == 'true'
@@ -40,7 +40,7 @@ jobs:
                 path: node_modules
                 key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
             - name: Install the dependencies
-              if: failure() && steps.cache.outputs.cache-hit != 'true'
+              if: failure() || steps.cache.outputs.cache-hit != 'true'
               run: npm ci
             - name: Verify the cache
               if: success() && steps.cache.outputs.cache-hit == 'true'
