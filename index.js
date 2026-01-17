@@ -24,7 +24,7 @@ app.get("/health", (req, res) => {
 let server;
 if (process.env.NODE_ENV !== 'test') {
   server = app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
   });
 }
 
