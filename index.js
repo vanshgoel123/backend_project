@@ -8,7 +8,6 @@ require("dotenv").config();
 require("./models/db");
 const PORT = process.env.PORT || 8000;
 
-
 app.use(bodyParser.json());
 app.use(cors());
 app.get("/", (req, res) => {
@@ -17,6 +16,16 @@ app.get("/", (req, res) => {
 
 app.use("/auth", auth);
 app.use("/products", products);
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
 });
+
+let server;
+if (process.env.NODE_ENV !== 'test') {
+  server = app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

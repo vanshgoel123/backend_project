@@ -1,0 +1,56 @@
+name: Backend CI
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+    pull_request:
+        branches:
+            - main
+jobs:
+    Lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get the code
+              uses: actions/checkout@v3
+            - name: Cache the dependencies
+              id: cache
+              uses: actions/cache@v3
+              with:
+                path: node_modules
+                key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+            - name: Install the dependencies
+              if: failure() && steps.cache.outputs.cache-hit != 'true'
+              run: npm ci
+            - name: Verify the cache
+              if: success() && steps.cache.outputs.cache-hit == 'true'
+              run: echo "Cache restored successfully"
+            - name: Lint code
+              run: npm run lint
+    Test:
+        needs: Lint
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get the code
+              uses: actions/checkout@v3
+            - name: Cache the dependencies
+              id: cache
+              uses: actions/cache@v3
+              with:
+                path: node_modules
+                key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+            - name: Install the dependencies
+              if: failure() && steps.cache.outputs.cache-hit != 'true'
+              run: npm ci
+            - name: Verify the cache
+              if: success() && steps.cache.outputs.cache-hit == 'true'
+              run: echo "Cache restored successfully"
+            - name: Run tests
+              run: npm run test
+    Deploy:
+        needs: Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Deploy to Server
+              run: echo "Deploy step goes here"            
+
