@@ -21,22 +21,39 @@ jobs:
         steps:
             - name: Get the code
               uses: actions/checkout@v3
+            
             - name: Init submodules
               run: git submodule update --init --recursive
+            
+            - name: Get version from package.json
+              id: version
+              run: |
+                VERSION=$(node -p "require('./package.json').version")
+                echo "version=$VERSION" >> $GITHUB_OUTPUT
+            
             - name: Login to docker
               uses: docker/login-action@v3
               with:
                   username: ${{ secrets.docker_username }}
                   password: ${{ secrets.docker_token }}
+            
             - name: Build and Push Docker Image
               run: |
-                    docker build -t ${{ secrets.docker_username }}/backend:latest .
-                    docker push ${{ secrets.docker_username }}/backend:latest
+                docker build -t ${{ secrets.docker_username }}/backend:latest \
+                             -t ${{ secrets.docker_username }}/backend:v${{ steps.version.outputs.version }} \
+                             -t ${{ secrets.docker_username }}/backend:${{ github.sha }} \
+                             .
+                docker push ${{ secrets.docker_username }}/backend:latest
+                docker push ${{ secrets.docker_username }}/backend:v${{ steps.version.outputs.version }}
+                docker push ${{ secrets.docker_username }}/backend:${{ github.sha }}
+            
             - name: Logout from Docker Hub
               if: always()
               run: docker logout
+            
             - name: Deploy to Server
-              run: echo "Pushed to docker hub"
+              run: echo "Pushed to docker hub with tags - latest, v${{ steps.version.outputs.version }}, ${{ github.sha }}"
+            
             - name: Set result output
               id: result
-              run: echo "step-result=success">>$GITHUB_OUTPUT
+              run: echo "step-result=success" >> $GITHUB_OUTPUT
