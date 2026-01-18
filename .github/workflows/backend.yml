@@ -1,8 +1,6 @@
 name: Backend CI
 on:
     push:
-        branches:
-            - main
     workflow_dispatch:
     pull_request:
         branches:
@@ -60,6 +58,7 @@ jobs:
               
     Deploy:
         needs: Test
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: ./.github/workflows/deploy.yml
         secrets:
             docker_username: ${{ secrets.DOCKER_USERNAME }}
