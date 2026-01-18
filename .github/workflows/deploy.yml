@@ -30,8 +30,10 @@ jobs:
                   password: ${{ secrets.docker_token }}
             - name: Build and Push Docker Image
               run: |
-                    docker build -t ${{ secrets.docker_username }}/backend:latest .
+                    docker build -t ${{ secrets.docker_username }}/backend:latest \
+                                 -t ${{ secrets.docker_username }}/backend:${{ github.sha }} \
                     docker push ${{ secrets.docker_username }}/backend:latest
+                    docker push ${{ secrets.docker_username }}/backend:${{ github.sha }}
             - name: Logout from Docker Hub
               if: always()
               run: docker logout
