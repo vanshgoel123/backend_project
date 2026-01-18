@@ -17,7 +17,9 @@ jobs:
               id: cache
               uses: actions/cache@v3
               with:
-                path: node_modules
+                path: |
+                    ~/.npm
+                    node_modules
                 key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
             - name: Install the dependencies
               if: failure() || steps.cache.outputs.cache-hit != 'true'
@@ -39,7 +41,9 @@ jobs:
               id: cache
               uses: actions/cache@v3
               with:
-                path: node_modules
+                path: |
+                    ~/.npm
+                    node_modules
                 key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
             - name: Install the dependencies
               if: failure() || steps.cache.outputs.cache-hit != 'true'
@@ -50,12 +54,7 @@ jobs:
             - name: Validate API contracts
               run: npx swagger-cli validate ./project_contracts/openapi.yml
             - name: Run tests
-              run: npm run test
-            - name: Debug - Check Secrets
-              run: |
-                    echo "Username: ${{ secrets.DOCKER_USERNAME }}"
-                    echo "Token length: ${{ secrets.DOCKER_TOKEN }}"
-              
+              run: npm run test  
     Deploy:
         needs: Test
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
