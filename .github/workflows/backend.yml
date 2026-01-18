@@ -53,6 +53,10 @@ jobs:
               run: npx swagger-cli validate ./project_contracts/openapi.yml
             - name: Run tests
               run: npm run test
+            - name: Debug - Check Secrets
+              run: |
+                    echo "Username: ${{ secrets.DOCKER_USERNAME }}"
+                    echo "Token length: ${{ secrets.DOCKER_TOKEN }}"
     Deploy:
         needs: Test
         uses: ./.github/workflows/deploy.yml
