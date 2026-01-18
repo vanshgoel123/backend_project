@@ -8,6 +8,7 @@ on:
 
 jobs:
     Deploy:
+        environment: testing
         outputs:
             resultss: ${{ steps.result.outputs.step-result }}
         runs-on: ubuntu-latest
