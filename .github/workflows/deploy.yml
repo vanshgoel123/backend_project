@@ -25,6 +25,9 @@ jobs:
               run: |
                     docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:latest .
                     docker push ${{ secrets.DOCKER_USERNAME }}/backend:latest
+            - name: Logout from Docker Hub
+              if: always()
+              run: docker logout
             - name: Deploy to Server
               run: echo "Pushed to docker hub"
             - name: Set result output
