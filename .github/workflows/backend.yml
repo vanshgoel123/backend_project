@@ -61,10 +61,9 @@ jobs:
     Deploy:
         needs: Test
         uses: ./.github/workflows/deploy.yml
-        with:
+        secrets:
             docker_username: ${{ secrets.DOCKER_USERNAME }}
             docker_token: ${{ secrets.DOCKER_TOKEN }}        
-        
     print_result:
         needs: Deploy
         runs-on: ubuntu-latest

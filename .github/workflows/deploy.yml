@@ -1,16 +1,13 @@
 name: Backend Deploy
 on: 
     workflow_call:
-        inputs:
+        secrets:
             docker_username:
                 description: 'Docker Hub username'
                 required: true
-                type: string
             docker_token:
                 description: 'Docker Hub token'
-                required: true
-                type: string
-                
+                required: true                
         outputs:
             result:
                 description: 'Result of the deploy step'
@@ -29,12 +26,12 @@ jobs:
             - name: Login to docker
               uses: docker/login-action@v3
               with:
-                  username: ${{ inputs.docker_username }}
-                  password: ${{ inputs.docker_token }}
+                  username: ${{ secrets.docker_username }}
+                  password: ${{ secrets.docker_token }}
             - name: Build and Push Docker Image
               run: |
-                    docker build -t ${{ inputs.docker_username }}/backend:latest .
-                    docker push ${{ inputs.docker_username }}/backend:latest
+                    docker build -t ${{ secrets.docker_username }}/backend:latest .
+                    docker push ${{ secrets.docker_username }}/backend:latest
             - name: Logout from Docker Hub
               if: always()
               run: docker logout
