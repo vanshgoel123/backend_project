@@ -57,10 +57,14 @@ jobs:
               run: |
                     echo "Username: ${{ secrets.DOCKER_USERNAME }}"
                     echo "Token length: ${{ secrets.DOCKER_TOKEN }}"
+              
     Deploy:
         needs: Test
         uses: ./.github/workflows/deploy.yml
-        
+        with:
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+            DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}        
+        secrets: inherit
     print_result:
         needs: Deploy
         runs-on: ubuntu-latest

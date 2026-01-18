@@ -1,6 +1,16 @@
 name: Backend Deploy
 on: 
     workflow_call:
+        inputs:
+            DOCKER_USERNAME:
+                description: 'Docker Hub username'
+                required: true
+                type: string
+            DOCKER_TOKEN:
+                description: 'Docker Hub token'
+                required: true
+                type: string
+                
         outputs:
             result:
                 description: 'Result of the deploy step'
@@ -17,10 +27,6 @@ jobs:
               uses: actions/checkout@v3
             - name: Init submodules
               run: git submodule update --init --recursive
-            - name: Debug - Check Secrets
-              run: |
-                    echo "Username: ${{ secrets.DOCKER_USERNAME }}"
-                    echo "Token length: ${{ secrets.DOCKER_TOKEN }}"
             - name: Login to docker
               uses: docker/login-action@v3
               with:
