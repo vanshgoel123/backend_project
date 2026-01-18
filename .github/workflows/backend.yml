@@ -55,8 +55,13 @@ jobs:
               run: npm run test
     Deploy:
         needs: Test
+        uses: ./.github/workflows/deploy.yml
+        
+    print_result:
+        needs: Deploy
         runs-on: ubuntu-latest
         steps:
-            - name: Deploy to Server
-              run: echo "Deploy step goes here"            
+            - name: Print Deploy Result
+              run: |
+                echo "Deploy Result: ${{ needs.Deploy.outputs.result }}"
 
