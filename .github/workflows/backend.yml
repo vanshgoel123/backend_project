@@ -62,8 +62,8 @@ jobs:
         needs: Test
         uses: ./.github/workflows/deploy.yml
         with:
-            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-            DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}        
+            docker_username: ${{ secrets.DOCKER_USERNAME }}
+            docker_token: ${{ secrets.DOCKER_TOKEN }}        
         secrets: inherit
     print_result:
         needs: Deploy
