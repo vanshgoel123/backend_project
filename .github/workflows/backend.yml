@@ -13,6 +13,8 @@ jobs:
         steps:
             - name: Get the code
               uses: actions/checkout@v3
+            - name: Init submodules
+              run: git submodule update --init --recursive
             - name: Cache the dependencies
               id: cache
               uses: actions/cache@v3
@@ -33,6 +35,8 @@ jobs:
         steps:
             - name: Get the code
               uses: actions/checkout@v3
+            - name: Init submodules
+              run: git submodule update --init --recursive
             - name: Cache the dependencies
               id: cache
               uses: actions/cache@v3
@@ -45,6 +49,8 @@ jobs:
             - name: Verify the cache
               if: success() && steps.cache.outputs.cache-hit == 'true'
               run: echo "Cache restored successfully"
+            - name: Validate API contracts
+              run: npx swagger-cli validate ./project_contracts/openapi.yml
             - name: Run tests
               run: npm run test
     Deploy:
