@@ -32,6 +32,7 @@ jobs:
               run: |
                     docker build -t ${{ secrets.docker_username }}/backend:latest \
                                  -t ${{ secrets.docker_username }}/backend:${{ github.sha }} \
+                                  .
                     docker push ${{ secrets.docker_username }}/backend:latest
                     docker push ${{ secrets.docker_username }}/backend:${{ github.sha }}
             - name: Logout from Docker Hub
@@ -41,4 +42,4 @@ jobs:
               run: echo "Pushed to docker hub"
             - name: Set result output
               id: result
-              run: echo "step-result=success">>$GITHUB_OUTPUT
+              run: echo "step-result=success" >> $GITHUB_OUTPUT
